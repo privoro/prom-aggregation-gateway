@@ -2,10 +2,10 @@
 	"version": 0,
 	"dependencies": [
 		{
-			"importpath": "github.com/Sirupsen/logrus",
-			"repository": "https://github.com/Sirupsen/logrus",
+			"importpath": "github.com/sirupsen/logrus",
+			"repository": "https://github.com/sirupsen/logrus",
 			"vcs": "git",
-			"revision": "881bee4e20a5d11a6a88a5667c6f292072ac1963",
+			"revision": "91ef3ab5d512bff80650991a0291c9ad8ebe2219",
 			"branch": "master",
 			"notests": true
 		},
@@ -100,7 +100,7 @@
 			"importpath": "golang.org/x/net/context",
 			"repository": "https://go.googlesource.com/net",
 			"vcs": "git",
-			"revision": "45e771701b814666a7eb299e6c7a57d0b1799e91",
+			"revision": "e086a090c8fdb9982880f0fb6e3db47af1856533",
 			"branch": "master",
 			"path": "/context",
 			"notests": true
@@ -109,7 +109,7 @@
 			"importpath": "golang.org/x/sys/unix",
 			"repository": "https://go.googlesource.com/sys",
 			"vcs": "git",
-			"revision": "d75a52659825e75fff6158388dddc6a5b04f9ba5",
+			"revision": "1957bb5e6d1f523308b49060df02171d06ddfc77",
 			"branch": "master",
 			"path": "/unix",
 			"notests": true
@@ -118,7 +118,7 @@
 			"importpath": "golang.org/x/sys/windows",
 			"repository": "https://go.googlesource.com/sys",
 			"vcs": "git",
-			"revision": "d75a52659825e75fff6158388dddc6a5b04f9ba5",
+			"revision": "1957bb5e6d1f523308b49060df02171d06ddfc77",
 			"branch": "master",
 			"path": "windows",
 			"notests": true
@@ -136,6 +136,14 @@
 			"repository": "https://gopkg.in/gemnasium/logrus-airbrake-hook.v2",
 			"vcs": "git",
 			"revision": "bfee1239d796830ca346767650cce5ba90d58c57",
+			"branch": "master",
+			"notests": true
+		},
+		{
+			"importpath": "github.com/robfig/cron",
+			"repository": "https://github.com/robfig/cron",
+			"vcs": "git",
+			"revision": "208b4f76bfdd237a814619382b19c85097fa9142",
 			"branch": "master",
 			"notests": true
 		}
