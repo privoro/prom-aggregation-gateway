@@ -18,6 +18,8 @@ import (
 
 // need this scope for cbs to reset data structure
 var a = newAggate()
+var nextResetTimestampSec int64 = 0
+const bufferSeconds int64 = 30
 
 func lablesLessThan(a, b []*dto.LabelPair) bool {
 	i, j := 0, 0
@@ -284,7 +286,7 @@ func main() {
 	flag.Parse()
 
 	// we want a concurrent cron to be able to wipe the cache so we can synchronize lambdas to aggregate on a tick, then clear for the next tick
-	// reasoning - if we get mulitple self-scrapes of data for any given lambda invocation within a cron period, we'll get duplicated data
+	// reasoning - if we get multiple self-scrapes of data for any given lambda invocation within a cron period, we'll get duplicated data
 	// 
 	// /metrics endpoint will also return a timestamp of the next 'data wipe' timing, so lambda callers will know not to send stats until after each period reset
 	// lifecycle = lambda req made -> lambda will post stats, gets ts value in aggregator response POST. lambda now can't post again till after that ts
@@ -294,16 +296,19 @@ func main() {
 	cronJob.AddFunc(*crontab, func() { 
 		log.Info("[Cron Job]Every 5 minutes, wipe cache.\n")
 		printCronEntries(cronJob.Entries())
-		// TODO - save 'nextTimestamp' for POST handler to return
 		log.Infof("Next cron runs at: %+v typeformat: %T\n", cronJob.Entries()[0].Next, cronJob.Entries()[0].Next)
 		// wipe data structure that's keeping tallies
 		a.families = map[string]*dto.MetricFamily{}
+		nextResetTimestampSec = cronJob.Entries()[0].Next.Unix()
 	})
 
 	// Start cron with our specified job
 	log.Info("Start cron")
 	cronJob.Start()
 	printCronEntries(cronJob.Entries())
+
+	// init first reset ts outside of cron cb
+	nextResetTimestampSec = cronJob.Entries()[0].Next.Unix()
 	
 	// setup http handlers
 	http.HandleFunc("/metrics", a.handler)
@@ -314,6 +319,9 @@ func main() {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
+		// writes to response writer (give buffer so clients won't try to connect right at reset time)
+		jsonResponse := fmt.Sprintf("{ \"nextResetTimestampSec\": %v }", nextResetTimestampSec + bufferSeconds)
+		io.WriteString(w, jsonResponse)
 	})
 	log.Fatal(http.ListenAndServe(*listen, nil))
 }
