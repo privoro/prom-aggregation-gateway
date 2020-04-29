@@ -279,7 +279,8 @@ func main() {
 
 	log.Info("Main Start")
 	
-	listen := flag.String("listen", ":8088", "Address and port to listen on.")
+	// note: 0.0.0.0 denotes all interfaces. needed for docker to bridge ports
+	listen := flag.String("listen", "0.0.0.0:9091", "Address and port to listen on.")
 	cors := flag.String("cors", "*", "The 'Access-Control-Allow-Origin' value to be returned.")
 	pushPath := flag.String("push-path", "/metrics/", "HTTP path to accept pushed metrics.")
 	crontab := flag.String("crontab", "*/5 * * * *", "crontab formatted cronjob timing of cache reset.")
@@ -323,5 +324,6 @@ func main() {
 		jsonResponse := fmt.Sprintf("{ \"nextResetTimestampSec\": %v }", nextResetTimestampSec + bufferSeconds)
 		io.WriteString(w, jsonResponse)
 	})
+	log.Infof("Listening on %v", *listen)
 	log.Fatal(http.ListenAndServe(*listen, nil))
 }
