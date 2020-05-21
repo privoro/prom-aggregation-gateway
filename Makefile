@@ -59,6 +59,8 @@ $(EXES) lint test: aggate-build/$(UPTODATE)
 	$(SUDO) docker run $(RM) \
 		-v $(shell pwd)/.pkg:/go/pkg \
 		-v $(shell pwd):/go/src/github.com/weaveworks/prom-aggregation-gateway \
+		-v $(shell pwd)/vendor/github.com/robfig/cron:/go/src/github.com/robfig/cron \
+		-v $(shell pwd)/vendor/github.com/sirupsen/logrus:/go/src/github.com/sirupsen/logrus \
 		-e CIRCLECI -e CIRCLE_BUILD_NUM -e CIRCLE_NODE_TOTAL -e CIRCLE_NODE_INDEX -e COVERDIR \
 		$(IMAGE_PREFIX)/aggate-build $@
 
