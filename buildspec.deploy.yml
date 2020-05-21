@@ -9,23 +9,16 @@ phases:
     commands:
     - echo "prometheus prebuild step"
     - $(aws ecr get-login --no-include-email --region us-west-2)
-    #- S3_BUCKET_URL="s3://$S3_BUCKET_NAME"
-    #- aws s3 cp $S3_BUCKET_URL/env.yml ./env.yml
-    #- aws s3 cp $S3_BUCKET_URL/privkey.pem ./privkey.pem
-    #- aws s3 cp $S3_BUCKET_URL/proxyappssl.pem ./proxyappssl.pem
     - pip install awscli --upgrade --user
   build:
     commands:
     - echo "pragg build step asdf"
     - docker --version
-    - make || true
-    - cd cmd/prom-aggregation-gateway
-    # - docker build -t 492058901556.dkr.ecr.us-west-2.amazonaws.com/prometheus:latest .
+    - make
     - echo - docker build -t ${BUILD_IMAGE_TAG} --build-arg "${FROM}" .
     - docker build -t ${BUILD_IMAGE_TAG} --build-arg BASE_IMAGE=${FROM} .
     - docker images
-    # - docker push 492058901556.dkr.ecr.us-west-2.amazonaws.com/prometheus:latest
-    - docker tag ${BUILD_IMAGE_TAG} ${REPOSITORY_URL}/${REPOSITORY_NAME}:${TARGET_IMAGE_NAME}
+    - docker tag weaveworks/prom-aggregation-gateway:latest ${REPOSITORY_URL}/${REPOSITORY_NAME}:${TARGET_IMAGE_NAME}
     - docker push ${REPOSITORY_URL}/${REPOSITORY_NAME}:${TARGET_IMAGE_NAME}
     # make ECS updating manual for now, out of scope
     # current issue: "message": "(service dev-prometheus-ecs-Service-UKCRAFTZ5G1K) was unable to place a task because no container instance met all of its requirements. 
