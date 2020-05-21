@@ -15,8 +15,6 @@ phases:
     - echo "pragg build step asdf"
     - docker --version
     - make
-    - echo - docker build -t ${BUILD_IMAGE_TAG} --build-arg "${FROM}" .
-    - docker build -t ${BUILD_IMAGE_TAG} --build-arg BASE_IMAGE=${FROM} .
     - docker images
     - docker tag weaveworks/prom-aggregation-gateway:latest ${REPOSITORY_URL}/${REPOSITORY_NAME}:${TARGET_IMAGE_NAME}
     - docker push ${REPOSITORY_URL}/${REPOSITORY_NAME}:${TARGET_IMAGE_NAME}
