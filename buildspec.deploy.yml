@@ -19,6 +19,8 @@ phases:
     - echo "pragg build step asdf"
     - docker --version
     - make images
+    - echo "look at images"
+    - docker images
     # - docker build -t 492058901556.dkr.ecr.us-west-2.amazonaws.com/prometheus:latest .
     #- echo - docker build -t ${BUILD_IMAGE_TAG} --build-arg "${FROM}" .
     #- docker build -t ${BUILD_IMAGE_TAG} --build-arg BASE_IMAGE=${FROM} .
