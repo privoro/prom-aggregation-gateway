@@ -18,14 +18,14 @@ phases:
     commands:
     - echo "pragg build step asdf"
     - docker --version
-    - make images
-    - echo "look at images"
-    - docker images
+    - make || true
+    - cd cmd/prom-aggregation-gateway
     # - docker build -t 492058901556.dkr.ecr.us-west-2.amazonaws.com/prometheus:latest .
-    #- echo - docker build -t ${BUILD_IMAGE_TAG} --build-arg "${FROM}" .
-    #- docker build -t ${BUILD_IMAGE_TAG} --build-arg BASE_IMAGE=${FROM} .
+    - echo - docker build -t ${BUILD_IMAGE_TAG} --build-arg "${FROM}" .
+    - docker build -t ${BUILD_IMAGE_TAG} --build-arg BASE_IMAGE=${FROM} .
+    - docker images
     # - docker push 492058901556.dkr.ecr.us-west-2.amazonaws.com/prometheus:latest
-    - docker tag weaveworks/prom-aggregation-gateway  ${REPOSITORY_URL}/${REPOSITORY_NAME}:${TARGET_IMAGE_NAME}
+    - docker tag ${BUILD_IMAGE_TAG} ${REPOSITORY_URL}/${REPOSITORY_NAME}:${TARGET_IMAGE_NAME}
     - docker push ${REPOSITORY_URL}/${REPOSITORY_NAME}:${TARGET_IMAGE_NAME}
     # make ECS updating manual for now, out of scope
     # current issue: "message": "(service dev-prometheus-ecs-Service-UKCRAFTZ5G1K) was unable to place a task because no container instance met all of its requirements. 
