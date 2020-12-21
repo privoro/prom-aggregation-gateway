@@ -8,7 +8,7 @@ phases:
   pre_build:
     commands:
     - echo "prometheus prebuild step"
-    - $(aws ecr get-login --no-include-email --region us-west-2)
+    - $(aws ecr get-login --no-include-email --region ${REGION})
     - pip install awscli --upgrade --user
   build:
     commands:
